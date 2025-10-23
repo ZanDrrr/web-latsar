@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk KBLI - Tim Kerja Eltek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #3730a3 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-blob:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: #3b82f6;
+            top: 0;
+            left: 0;
+            animation-delay: 0s;
+        }
+
+        .bg-blob:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: #6366f1;
+            top: 33%;
+            right: 0;
+            animation-delay: 2s;
+        }
+
+        .bg-blob:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: #8b5cf6;
+            bottom: 0;
+            left: 33%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(37, 99, 235, 0.3);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 48px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .header-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .header-icon {
+            background: linear-gradient(135deg, #60a5fa 0%, #6366f1 100%);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        h1 span {
+            color: #93c5fd;
+        }
+
+        .subtitle {
+            color: #93c5fd;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .sub-subtitle {
+            color: #bfdbfe;
+            font-size: 0.9rem;
+        }
+
+        .header-right {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .stat-card {
+            background: rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .stat-card:nth-child(2) {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .stat-card:nth-child(2):hover {
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .stat-card:nth-child(3) {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .stat-card:nth-child(3):hover {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .stat-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h3 {
+            color: #93c5fd;
+            font-size: 0.875rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            color: #93c5fd;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-icon {
+            background: rgba(59, 130, 246, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        /* Search and Filter */
+        .search-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 32px;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .search-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            padding-right: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: #bfdbfe;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #93c5fd;
+        }
+
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #93c5fd;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+        }
+
+        /* KBLI Cards */
+        .kbli-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .kbli-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .kbli-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .kbli-header {
+            padding: 24px;
+        }
+
+        .kbli-badges {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .kbli-code {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            padding: 8px 16px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .kbli-category {
+            background: rgba(99, 102, 241, 0.3);
+            padding: 4px 12px;
+            border-radius: 999px;
+            color: #c7d2fe;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .kbli-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .kbli-card:hover .kbli-title {
+            color: #93c5fd;
+        }
+
+        .kbli-description {
+            color: #bfdbfe;
+            font-size: 0.875rem;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .kbli-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-count {
+            color: #93c5fd;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chevron {
+            color: #93c5fd;
+            transition: transform 0.3s ease;
+        }
+
+        .kbli-card.expanded .chevron {
+            transform: rotate(90deg);
+        }
+
+        .kbli-products {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            display: none;
+        }
+
+        .kbli-card.expanded .kbli-products {
+            display: block;
+        }
+
+        .products-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .product-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .product-number {
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .product-name {
+            color: #93c5fd;
+            transition: color 0.3s ease;
+        }
+
+        .product-item:hover .product-name {
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 64px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .empty-icon {
+            color: #93c5fd;
+            opacity: 0.5;
+            margin: 0 auto 16px;
+        }
+
+        .empty-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: #bfdbfe;
+        }
+
+        /* Footer */
+        .footer-info {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 32px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-icon-box {
+            background: rgba(59, 130, 246, 0.3);
+            padding: 12px;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .footer-content h3 {
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .footer-content p {
+            color: #bfdbfe;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-lg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .icon-xl {
+            width: 64px;
+            height: 64px;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            .kbli-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="bg-blob"></div>
+        <div class="bg-blob"></div>
+        <div class="bg-blob"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-title-wrapper">
+                        <div class="header-icon">
+                            <svg class="icon-lg" viewBox="0 0 24 24">
+                                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                <path d="M6 12h.01M10 12h.01M14 12h.01"/>
+                            </svg>
+                        </div>
+                        <h1>Katalog Produk <span>KBLI</span></h1>
+                    </div>
+                    <p class="subtitle">Tim Kerja Elektronika dan Telematika</p>
+                    <p class="sub-subtitle">Direktorat IKM Logam, Mesin, Elektronika, dan Aneka</p>
+                </div>
+                <div class="header-right">
+                    <svg class="icon-xl" viewBox="0 0 24 24" style="color: #fcd34d;">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <h3>Total KBLI</h3>
+                        <div class="stat-number" id="totalKBLI">8</div>
+                        <p class="stat-label">
+                            <svg class="icon-sm" viewBox="0 0 24 24">
+                                <path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7"/>
+                            </svg>
+                            Kategori Industri
+                        </p>
+                    </div>
+                    <div class="stat-icon">
+                        <svg class="icon-lg" viewBox="0 0 24 24" style="color: #93c5fd;">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <h3>Total Produk</h3>
+                        <div class="stat-number" id="totalProducts">49</div>
+                        <p class="stat-label">
+                            <svg class="icon-sm" viewBox="0 0 24 24">
+                                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                            </svg>
+                            Varian Tersedia
+                        </p>
+                    </div>
+                    <div class="stat-icon">
+                        <svg class="icon-lg" viewBox="0 0 24 24" style="color: #a5b4fc;">
+                            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                            <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-content">
+                    <div class="stat-info">
+                        <h3>Hasil Pencarian</h3>
+                        <div class="stat-number" id="searchResults">8</div>
+                        <p class="stat-label">
+                            <svg class="icon-sm" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="M21 21l-4.35-4.35"/>
+                            </svg>
+                            Data Ditemukan
+                        </p>
+                    </div>
+                    <div class="stat-icon">
+                        <svg class="icon-lg" viewBox="0 0 24 24" style="color: #c4b5fd;">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-section">
+            <div class="search-grid">
+                <div class="search-group">
+                    <label>
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        Pencarian Cepat
+                    </label>
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="searchInput"
+                            placeholder="Cari kode KBLI, nama industri, atau produk..."
+                        >
+                        <svg class="icon search-icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="search-group">
+                    <label>Filter Kategori</label>
+                    <div class="category-filters" id="categoryFilters">
+                        <!-- Categories will be added by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KBLI Cards -->
+        <div class="kbli-grid" id="kbliGrid">
+            <!-- Cards will be added by JavaScript -->
+        </div>
+
+        <!-- Footer Info -->
+        <div class="footer-info">
+            <div class="footer-icon-box">
+                <svg class="icon" viewBox="0 0 24 24" style="color: #93c5fd;">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+            </div>
+            <div class="footer-content">
+                <h3>Tentang Katalog Ini</h3>
+                <p>
+                    Katalog ini menampilkan klasifikasi KBLI (Klasifikasi Baku Lapangan Usaha Indonesia) yang berada di bawah 
+                    binaan Tim Kerja Elektronika dan Telematika, Direktorat IKM LMEA. Setiap kategori KBLI dilengkapi dengan 
+                    daftar produk utama yang diproduksi oleh industri terkait. Klik pada kartu untuk melihat detail produk.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data KBLI
+        const kbliData = [
+            {
+                kode: '27101',
+                nama: 'Industri Motor Listrik dan Generator Listrik',
+                kategori: 'Elektronika',
+                deskripsi: 'Manufaktur motor listrik, generator, dan peralatan penggerak listrik',
+                produk: [
+                    'Motor Listrik AC/DC',
+                    'Generator Listrik',
+                    'Dinamo Listrik',
+                    'Alternator',
+                    'Motor Servo',
+                    'Motor Stepper'
+                ]
+            },
+            {
+                kode: '27102',
+                nama: 'Industri Transformator',
+                kategori: 'Elektronika',
+                deskripsi: 'Produksi transformator dan perangkat distribusi listrik',
+                produk: [
+                    'Transformator Daya',
+                    'Transformator Distribusi',
+                    'Trafo Step Up/Down',
+                    'Ballast Elektronik',
+                    'Adaptor Listrik',
+                    'Trafo Isolasi'
+                ]
+            },
+            {
+                kode: '26110',
+                nama: 'Industri Komponen dan Papan Sirkuit Elektronik',
+                kategori: 'Elektronika',
+                deskripsi: 'Pembuatan komponen elektronik dan printed circuit board',
+                produk: [
+                    'PCB (Printed Circuit Board)',
+                    'Integrated Circuit (IC)',
+                    'Resistor dan Kapasitor',
+                    'Dioda dan Transistor',
+                    'LED Components',
+                    'Mikroprosesor'
+                ]
+            },
+            {
+                kode: '26200',
+                nama: 'Industri Komputer dan Perlengkapannya',
+                kategori: 'Elektronika',
+                deskripsi: 'Produksi komputer, laptop, dan perangkat komputasi',
+                produk: [
+                    'Personal Computer',
+                    'Laptop/Notebook',
+                    'Server dan Workstation',
+                    'Tablet dan Hybrid Device',
+                    'Motherboard dan RAM',
+                    'Hard Disk dan SSD'
+                ]
+            },
+            {
+                kode: '26400',
+                nama: 'Industri Peralatan Komunikasi Tanpa Kabel',
+                kategori: 'Telekomunikasi',
+                deskripsi: 'Manufaktur perangkat komunikasi wireless dan infrastruktur',
+                produk: [
+                    'Telepon Seluler/Smartphone',
+                    'Base Transceiver Station (BTS)',
+                    'Router dan Access Point',
+                    'Radio Komunikasi',
+                    'Antena Telekomunikasi',
+                    'Modem 4G/5G'
+                ]
+            },
+            {
+                kode: '26510',
+                nama: 'Industri Peralatan Ukur dan Uji Elektronik',
+                kategori: 'Instrumentasi',
+                deskripsi: 'Produksi alat ukur, pengujian, dan instrumentasi elektronik',
+                produk: [
+                    'Multimeter Digital',
+                    'Oscilloscope',
+                    'Function Generator',
+                    'Power Supply',
+                    'Logic Analyzer',
+                    'Spectrum Analyzer'
+                ]
+            },
+            {
+                kode: '27900',
+                nama: 'Industri Peralatan Listrik Lainnya',
+                kategori: 'Elektronika',
+                deskripsi: 'Pembuatan berbagai peralatan dan perlengkapan listrik',
+                produk: [
+                    'Kabel Listrik dan Konektor',
+                    'Panel Listrik',
+                    'MCB dan MCCB',
+                    'Kontaktor dan Relay',
+                    'Lampu LED Industri',
+                    'Stop Kontak dan Saklar'
+                ]
+            },
+            {
+                kode: '26300',
+                nama: 'Industri Peralatan Komunikasi',
+                kategori: 'Telekomunikasi',
+                deskripsi: 'Produksi perangkat komunikasi dan broadcasting',
+                produk: [
+                    'Telepon Kabel',
+                    'PABX dan IP-PBX',
+                    'Pemancar Radio/TV',
+                    'Kamera CCTV',
+                    'Intercom System',
+                    'Video Conference Equipment'
+                ]
+            }
+        ];
+
+        let currentCategory = 'Semua';
+        let searchTerm = '';
+
+        // Initialize
+        function init() {
+            renderCategories();
+            renderCards();
+            updateStats();
+            
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+        }
+
+        // Render category filters
+        function renderCategories() {
+            const categories = ['Semua', ...new Set(kbliData.map(item => item.kategori))];
+            const container = document.getElementById('categoryFilters');
+            
+            container.innerHTML = categories.map(cat => `
+                <button 
+                    class="category-btn ${cat === currentCategory ? 'active' : ''}" 
+                    onclick="filterByCategory('${cat}')"
+                >
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            currentCategory = category;
+            renderCategories();
+            renderCards();
+            updateStats();
+        }
+
+        // Handle search
+        function handleSearch(e) {
+            searchTerm = e.target.value.toLowerCase();
+            renderCards();
+            updateStats();
+        }
+
+        // Get filtered data
+        function getFilteredData() {
+            return kbliData.filter(item => {
+                const matchSearch = 
+                    item.kode.includes(searchTerm) ||
+                    item.nama.toLowerCase().includes(searchTerm) ||
+                    item.produk.some(p => p.toLowerCase().includes(searchTerm));
+                
+                const matchCategory = currentCategory === 'Semua' || item.kategori === currentCategory;
+                
+                return matchSearch && matchCategory;
+            });
+        }
+
+        // Render cards
+        function renderCards() {
+            const filteredData = getFilteredData();
+            const container = document.getElementById('kbliGrid');
+            
+            if (filteredData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="icon-xl empty-icon" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                        <p class="empty-title">Tidak ada data yang ditemukan</p>
+                        <p class="empty-text">Coba ubah kata kunci pencarian atau filter kategori</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredData.map(item => `
+                <div class="kbli-card" id="card-${item.kode}" onclick="toggleCard('${item.kode}')">
+                    <div class="kbli-header">
+                        <div class="kbli-badges">
+                            <div class="kbli-code">KBLI ${item.kode}</div>
+                            <div class="kbli-category">${item.kategori}</div>
+                        </div>
+                        <h3 class="kbli-title">${item.nama}</h3>
+                        <p class="kbli-description">${item.deskripsi}</p>
+                        <div class="kbli-footer">
+                            <span class="product-count">
+                                <svg class="icon-sm" viewBox="0 0 24 24">
+                                    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                                </svg>
+                                ${item.produk.length} Produk
+                            </span>
+                            <svg class="icon chevron" viewBox="0 0 24 24">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="kbli-products">
+                        <h4 class="products-title">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                            </svg>
+                            Daftar Produk
+                        </h4>
+                        <div class="products-list">
+                            ${item.produk.map((produk, idx) => `
+                                <div class="product-item">
+                                    <div class="product-number">${idx + 1}</div>
+                                    <span class="product-name">${produk}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Toggle card expansion
+        function toggleCard(kode) {
+            const card = document.getElementById(`card-${kode}`);
+            card.classList.toggle('expanded');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const filteredData = getFilteredData();
+            const totalProducts = kbliData.reduce((sum, item) => sum + item.produk.length, 0);
+            
+            document.getElementById('totalKBLI').textContent = kbliData.length;
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('searchResults').textContent = filteredData.length;
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
